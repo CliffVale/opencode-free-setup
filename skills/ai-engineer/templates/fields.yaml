@@ -1,0 +1,40 @@
+# fields.yaml template — field categories and definitions
+# Used by ai-engineer Mode A. validate_json.py enforces these against result JSONs.
+
+field_categories:
+  - category: basic_info
+    fields:
+      - name: name
+        description: Official name of the item
+        detail_level: brief
+        required: true
+      - name: company
+        description: Company / organization behind it
+        detail_level: brief
+        required: true
+      - name: release_date
+        description: Initial release or launch date
+        detail_level: brief
+        required: false
+
+  - category: technical_features
+    fields:
+      - name: underlying_model
+        description: Base model(s) powering the item
+        detail_level: moderate
+        required: false
+      - name: context_window
+        description: Supported context window size
+        detail_level: moderate
+        required: false
+
+  - category: performance_metrics
+    fields:
+      - name: key_benchmarks
+        description: Benchmark scores (SWE-bench, MMLU, etc.) with dates
+        detail_level: detailed
+        required: false
+
+# detail_level hierarchy: brief -> moderate -> detailed
+# Values that cannot be verified MUST be marked [uncertain] and listed in the
+# JSON's `uncertain` array — never fabricated.

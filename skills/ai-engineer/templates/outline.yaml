@@ -1,0 +1,18 @@
+# outline.yaml template — research items + execution config
+# Used by ai-engineer Mode A (outline-driven deep research).
+
+topic: <research topic>
+
+items:
+  - name: <item name>
+    category: <category e.g. International Product / Open Source / Methodology>
+    description: <one-line description of what this item is>
+
+#  - name: Example Item
+#    category: Open Source
+#    description: First mainstream example in this space
+
+execution:
+  batch_size: 2          # parallel agents per batch (confirm with user)
+  items_per_agent: 1     # items per agent (confirm with user)
+  output_dir: ./results  # where item JSON results are written

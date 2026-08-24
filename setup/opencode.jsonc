@@ -1,0 +1,86 @@
+// OpenCode Free Setup — curated configuration template
+// Compiled from the best free/open setups available (see ATTRIBUTION.md).
+// Install: copy to ~/.config/opencode/opencode.jsonc  (installer does this)
+// Keys:    NONE required to start. Optional keys unlock more — see docs/05-api-keys-guide.md
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // ── Model: free by default ─────────────────────────────────────────────
+  // Zen free models rotate; check /models or https://opencode.ai/zen monthly.
+  "model": "opencode/deepseek-v4-flash-free",
+  // Route internal chores (session titles/summaries) to the same free model
+  "small_model": "opencode/deepseek-v4-flash-free",
+
+  // ── MCP servers ────────────────────────────────────────────────────────
+  "mcp": {
+    // Core — no keys needed
+    "filesystem": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-filesystem", "~"],
+      "enabled": true
+    },
+    "fetch": {
+      "type": "local",
+      "command": ["uvx", "mcp-server-fetch"],
+      "enabled": true
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "enabled": true
+    },
+    // Keyless remote web layer (1,000 credits/month, no signup)
+    "firecrawl": {
+      "type": "remote",
+      "url": "https://mcp.firecrawl.dev/v2/mcp",
+      "enabled": true
+    },
+    // Keyless remote library-docs lookup
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "enabled": true
+    },
+    // GitHub — needs a free PAT (docs/05). Set GITHUB_PERSONAL_ACCESS_TOKEN env first.
+    "github": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+      "enabled": false
+    },
+    // Exa neural search — free tier 1,000 req/month, key at exa.ai (docs/05)
+    "exa": {
+      "type": "local",
+      "command": ["npx", "-y", "exa-mcp-server"],
+      "enabled": false
+    },
+    // Multi-engine web search — works with ZERO keys (DuckDuckGo/Sogou);
+    // optional Tavily/Brave/Exa keys raise quality (docs/06)
+    "agent-search": {
+      "type": "local",
+      "command": ["npx", "-y", "agent-search-mcp"],
+      "enabled": true
+    }
+    // OPTIONAL — installer can append these when you opt in:
+    //   tgcli  (chat with your agent via Telegram bot; needs @BotFather token)
+    //   zotero (reference manager integration; needs Zotero API key)
+  },
+
+  // ── Extra agents on top of built-in plan/build ─────────────────────────
+  "agent": {
+    "reviewer": {
+      "description": "Code review agent. Read-heavy, write-light: reviews diffs, finds bugs, suggests fixes.",
+      "mode": "subagent",
+      "model": "opencode/deepseek-v4-flash-free",
+      "temperature": 0.1,
+      "prompt": "{file:./agents/reviewer.md}"
+    },
+    "deepsearch": {
+      "description": "Elite multi-source web research subagent. Use for deep investigation, debugging via issues/forums, comparative research.",
+      "mode": "subagent",
+      "model": "opencode/deepseek-v4-flash-free",
+      "temperature": 0.3,
+      "prompt": "{file:./agents/deepsearch.md}",
+      "tools": { "write": false, "edit": false }
+    }
+  }
+}

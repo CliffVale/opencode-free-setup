@@ -1,0 +1,28 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  sanitize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/sanitize-check.sh
+
+  shellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: sudo apt-get install -y shellcheck && shellcheck install.sh scripts/*.sh
+
+  installer-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install config+skills into isolated HOME (no tools)
+        run: |
+          export OPENCODE_CONFIG_DIR=$(mktemp -d)/cfg
+          OCFS_SKIP_TOOLS=1 bash install.sh -y --skip-tools "$PWD"
+          test -f "$OPENCODE_CONFIG_DIR/opencode.jsonc"
+          test -d "$OPENCODE_CONFIG_DIR/skills"
+          echo "skills installed: $(ls "$OPENCODE_CONFIG_DIR/skills" | wc -l)"

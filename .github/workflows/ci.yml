@@ -6,19 +6,19 @@ jobs:
   sanitize:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: bash scripts/sanitize-check.sh
 
   shellcheck:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: sudo apt-get install -y shellcheck && shellcheck install.sh scripts/*.sh
 
   installer-smoke:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Install config+skills into isolated HOME (no tools)
         run: |
           export OPENCODE_CONFIG_DIR=$(mktemp -d)/cfg
